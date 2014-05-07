@@ -1,6 +1,9 @@
 #!/bin/bash
 # /etc/init.d/minecraft
 # version 2014-03-02 (YYYY-MM-DD)
+# by Super Jamie <jamie@superjamie.net>
+# Indonesian version 2014-06-07 (YYYY-MM-DD)
+# by Bayu Aditya H. <b@yuah.web.id>
 
 ### BEGIN INIT INFO
 # Provides: minecraft
@@ -14,7 +17,7 @@
 # Description: Starts the CraftBukkit Minecraft server
 ### END INIT INFO
 
-# minecraft-init-script - An initscript to start Minecraft or CraftBukkit
+# minecraft-init-script - initscript untuk memulai Minecraft atau CraftBukkit
 # Copyright (C) 2011-2014 Super Jamie <jamie@superjamie.net>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -30,7 +33,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Source the function library
+# Sumber pustaka fungsi
 ## CentOS/Fedora
 if [ -f /etc/rc.d/init.d/functions ]
  then
@@ -42,67 +45,68 @@ if [ -f /lib/lsb/init-functions ]
  . /lib/lsb/init-functions
 fi
 
-<<COMMENT
+<<KOMENTAR
 ## ---------------------------------------------------------
-## copy between these lines and place them at /etc/default/minecraft
-## do not include the <<COMMENT and COMMENT words
+## salin di antara garis berikut dan letakkan di /etc/default/minecraft
+## jangan menyertakan kata <<KOMENTAR dan KOMENTAR
 
-## Settings for minecraft-init-script
+## Pengaturan untuk minecraft-init-script
 
-# Nice looking name of service for script to report back to users
+# Nama keren untuk laporan sekrip ke pengguna
 SERVERNAME="CraftBukkit"
 
-# Filename of server binary
+# Nama berkas biner peladen
 SERVICE="craftbukkit.jar"
 
-# URL of server executable for update checking - http://cbukk.it/craftbukkit.jar is the recommended latest Craftbukkit URL
+# URL eksekusi peladen untuk pemeriksaan pembaruan
+# - http://cbukk.it/craftbukkit.jar disarankan untuk URL Craftbukkit terkini.
 SERVER_URL="http://cbukk.it/craftbukkit.jar"
 
-# Username of non-root user who will run the server
+# Nama pengguna bukan-root yang menjalankan peladen
 USERNAME="bukkit"
 
-# Path of server binary and world
+# Lajur biner peladen dan dunia
 MCPATH="/home/bukkit/craftbukkit"
 
-# Number of CPU cores to thread across if using multithreaded garbage collection
+# Cacah inti CPU untuk untas bila menggunakan koleksi multi-utas
 CPU_COUNT="2"
 
-# Where backups go
+# Lokasi cadangan
 BACKUPPATH="/home/bukkit/backups"
 
-# How many days worth of backups to keep (default 7)
+# Berapa lama hari cadangan disimpan (asali 7)
 BACKUPS_TO_KEEP="7"
 
-# Name of Screen session
+# Nama sesi Screen
 SCRNAME="minecraft"
 
-## The Java command to run the server, uncomment one INVOCATION line only!
+## Perintah Java untuk menjalankan peladen, hilangkan komentar satu baris `INVOCATION` saja!
 
-# Nothing special, just start the server with 1Gb RAM
+# Bukan luar biasa, hanya menjalankan dengan RAM 1GB saja.
 # INVOCATION="java -Xms1024M -Xmx1024M -Djava.net.preferIPv4Stack=true -jar $SERVICE nogui"
 
-# This is what I run my server with, tune your RAM usage accordingly
-# Tested fastest GC - Default parallel new gen collector, plus parallel old gen collector
+# Ini bagaimana peladenku berjalan, atur penggunaan RAM-mu berdasarkan
+# GC teruji tercepat - Paralel gen baru asali baru, juga gen paralel lama.
 INVOCATION="java -Xms1024M -Xmx1024M -Djava.net.preferIPv4Stack=true -XX:MaxPermSize=128M -XX:UseSSE=3 -XX:-DisableExplicitGC -XX:+UseParallelOldGC -XX:ParallelGCThreads=$CPU_COUNT -XX:+AggressiveOpts -XX:+UseCompressedStrings -jar $SERVICE nogui"
 
-# I removed these "performance" commands as I don't see any difference with them
+# Perintah "performa" ini dihapus sebab tak tampak perbedaan
 # -XX:+UseFastAccessorMethods -XX:+UseAdaptiveGCBoundary
 
-# I've had a suggestion from a Java tuning engineer to use these
+# Saran dari insinyur pengaturan Java untuk menggunakan ini
 # -XX:+AggressiveOpts -XX:+UseCompressedStrings
 
-# Add HugePage support if you have it configured on the OS
-# You should be using HugePages if you give more than 4Gb on the Java invocation line
+# Dan dukungan `HugePage` bila sistem operasi milikmu mendukung ini
+# Kamu harus menggunakan `HugePages` bila kamu ingin memberikan lebih dari 4GB dalam baris perintah Java
 # -XX:+UseLargePages
 
 SETTINGS_FILE_WORKING="1"
-## End of settings file
+## Akhir baris pengaturan
 ## ---------------------------------------------------------
-COMMENT
+KOMENTAR
 
-### ### ### ### ### ### ### ### ### ### ### ### ### ###
-### You shouldn't need to edit anything below here! ###
-### ### ### ### ### ### ### ### ### ### ### ### ### ###
+### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ###
+### Kamu seharusnya tak perlu sunting bagian di bawah ini!  ###
+### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ###
 
 ## Apply the settings file
 
@@ -123,7 +127,7 @@ fi
 if [ ! "$SETTINGS_FILE_WORKING" == "1" ]
  then
  echo " * [ERROR] Settings file $SETTINGSFILE is not applying. Can't run!"
- echo " Check your options are uncommented and you haven't copied the <<COMMENT block."
+ echo " Check your options are uncommented and you haven't copied the <<KOMENTAR block."
  exit 1;
 fi
 
