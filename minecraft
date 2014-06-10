@@ -108,30 +108,30 @@ KOMENTAR
 ### Kamu seharusnya tak perlu sunting bagian di bawah ini!  ###
 ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ###
 
-## Apply the settings file
+## Menerapkan berkas pengaturan.
 
-# define the location of the settings file from the name of this script
+# Mendefinisikan lokasi berkas pengaturan dari nama sekrip.
 SETTINGSFILE="/etc/default/$(basename $0)"
 
-# check the file exists, and fail if not
+# Memeriksa apakah berkas tersedia, dan gagal bila tidak.
 if [ ! -f "$SETTINGSFILE" ]
  then
- echo " * [ERROR] Settings file $SETTINGSFILE does not exist. Can't run!"
+ echo " * [GALAT] Berkas pengaturan $SETTINGSFILE tidak tersedia. Tak dapat berjalan!"
  exit 1;
 fi
 
-# if exists so source it
+# Bila ada, maka dipanggil.
 . "$SETTINGSFILE"
 
-# if the settings are not applying for some reason, then fail
+# Bila pengaturan gagal diterapkan dengan suatu alasan, maka gagal.
 if [ ! "$SETTINGS_FILE_WORKING" == "1" ]
  then
- echo " * [ERROR] Settings file $SETTINGSFILE is not applying. Can't run!"
- echo " Check your options are uncommented and you haven't copied the <<KOMENTAR block."
+ echo " * [GALAT] Berkas pengaturan $SETTINGSFILE gagal diterapkan. Tak dapat berjalan!"
+ echo " Periksa bahwa pengaturan kamu telah tidak dikomentari dan kamu tidak menyalin blok <<KOMENTAR."
  exit 1;
 fi
 
-## Get some more info from the settings file
+## Memperoleh beberapa informasi dari berkas pengaturan.
 
 # Find the world name from the existing server file
 WORLDNAME="$(cat $MCPATH/server.properties | grep -E 'level-name' | sed -e s/.*level-name=//)"
@@ -180,20 +180,20 @@ server_running() {
 mc_start() {
   if server_running
   then
-    echo " * [ERROR] $SERVERNAME was already running (pid $JAVAPID). Not starting!"
+    echo " * [GALAT] $SERVERNAME telah berjalan (pid $JAVAPID). Tidak memulai!"
     exit 1
   else
-    echo " * $SERVERNAME was not already running. Starting..."
-    echo " * Using map named \"$WORLDNAME\"..."
+    echo " * $SERVERNAME tidak berjalan. Memulai..."
+    echo " * Menggunakan peta dengan nama \"$WORLDNAME\"..."
     as_user "cd \"$MCPATH\" && screen -c /dev/null -dmS $SCRNAME $INVOCATION"
     sleep 10
-    echo " * Checking $SERVERNAME is running..."
+    echo " * Memeriksa $SERVERNAME telah berjalan..."
 
     if server_running
     then
-      echo " * [OK] $SERVERNAME is now running (pid $JAVAPID)."
+      echo " * [OK] $SERVERNAME sekarang berjalan (pid $JAVAPID)."
     else
-      echo " * [ERROR] Could not start $SERVERNAME."
+      echo " * [GALAT] Tidak dapat memulai $SERVERNAME."
       exit 1
     fi
 
@@ -205,26 +205,26 @@ mc_start() {
 mc_stop() {
   if server_running
   then
-    echo " * $SERVERNAME is running (pid $JAVAPID). Commencing shutdown..."
-    echo " * Notifying users of shutdown..."
-    as_user "screen -p 0 -S $SCRNAME -X eval 'stuff \"say SERVER SHUTTING DOWN IN 10 SECONDS. Saving map...\"\015'"
-    echo " * Saving map named \"$WORLDNAME\" to disk..."
+    echo " * $SERVERNAME telah berjalan (pid $JAVAPID). Memulai mematikan..."
+    echo " * Memberitahukan pengguna akan pematian..."
+    as_user "screen -p 0 -S $SCRNAME -X eval 'stuff \"say PELADEN AKAN MATI DALAM 10 DETIK. Menyimpan peta...\"\015'"
+    echo " * Menyimpan peta dengan nama \"$WORLDNAME\" ke diska..."
     as_user "screen -p 0 -S $SCRNAME -X eval 'stuff \"save-all\"\015'"
     sleep 10
-    echo " * Stopping $SERVERNAME..."
+    echo " * Menghentikan $SERVERNAME..."
     as_user "screen -p 0 -S $SCRNAME -X eval 'stuff \"stop\"\015'"
     sleep 10
   else
-    echo " * [ERROR] $SERVERNAME was not running. Unable to stop!"
+    echo " * [GALAT] $SERVERNAME tidak berjalan. Tidak dapat menghentikan!"
     exit 1
   fi
 
   if server_running
   then
-    echo " * [ERROR] $SERVERNAME is still running (pid $JAVAPID). Could not be shutdown!"
+    echo " * [GALAT] $SERVERNAME masih berjalan (pid $JAVAPID). Tidak dapat mematikan!"
     exit 1
   else
-    echo " * [OK] $SERVERNAME is shut down."
+    echo " * [OK] $SERVERNAME telah mati."
   fi
 }
 
@@ -233,18 +233,18 @@ mc_stop() {
 mc_saveoff() {
   if server_running
   then
-    echo " * $SERVERNAME is running. Commencing save..."
-    echo " * Notifying users of save..."
-    as_user "screen -p 0 -S $SCRNAME  -X eval 'stuff \"say SERVER BACKUP STARTING. Server going read-only...\"\015'"
-    echo " * Setting server read-only..."
+    echo " * $SERVERNAME masih berjalan. Memulai penyimpanan..."
+    echo " * Memberitahukan pengguna akan penyimpanan..."
+    as_user "screen -p 0 -S $SCRNAME  -X eval 'stuff \"say PENCADANGAN PELADEN DIMULAI. Peladen mulai hanya-baca...\"\015'"
+    echo " * Mengatur peladen hanya-baca..."
     as_user "screen -p 0 -S $SCRNAME -X eval 'stuff \"save-off\"\015'"
-    echo " * Saving map named \"$WORLDNAME\" to disk..."
+    echo " * Menyimpan peta dengan nama \"$WORLDNAME\" ke diska..."
     as_user "screen -p 0 -S $SCRNAME -X eval 'stuff \"save-all\"\015'"
     sync
     sleep 10
-    echo " * [OK] Map saved."
+    echo " * [OK] Peta tersimpan."
   else
-    echo " * [INFO] $SERVERNAME was not running. Not suspending saves."
+    echo " * [INFO] $SERVERNAME tidak berjalan. Tidak ada penyimpanan tertunda."
   fi
 }
 
@@ -253,11 +253,11 @@ mc_saveoff() {
 mc_saveon() {
   if server_running
   then
-    echo " * $SERVERNAME is running. Re-enabling saves..."
-    as_user "screen -p 0 -S $SCRNAME -X eval 'stuff \"say SERVER BACKUP ENDED. Server going read-write...\"\015'"
+    echo " * $SERVERNAME masih berjalan. Mengaktifkan kembali penyimpanan..."
+    as_user "screen -p 0 -S $SCRNAME -X eval 'stuff \"say PENCADANGAN PELADEN SELESAI. Peladen mulai baca-tulis...\"\015'"
     as_user "screen -p 0 -S $SCRNAME -X eval 'stuff \"save-on\"\015'"
   else
-    echo " * [INFO] $SERVERNAME was not running. Not resuming saves."
+    echo " * [INFO] $SERVERNAME tidak berjalan. Tidak ada penyimpanan dilanjutkan."
   fi
 }
 
@@ -323,45 +323,45 @@ mc_checkbackup() {
 ## Backs up map by rsyncing current world to backup location, creates tar.gz with datestamp
 
 mc_backupmap() {
-  echo " * Backing up $SERVERNAME map named \"$WORLDNAME\"..."
-  echo " * Syncing \"$MCPATH/$WORLDNAME\" to \"$BACKUPPATH/$WORLDNAME\""
+  echo " * Mencadangkan peta $SERVERNAME dengan nama \"$WORLDNAME\"..."
+  echo " * Sinkronisasi \"$MCPATH/$WORLDNAME\" terhadap \"$BACKUPPATH/$WORLDNAME\""
   as_user "rsync --checksum --group --human-readable --copy-links --owner --perms --recursive --times --update --delete \"$MCPATH/$WORLDNAME\" \"$BACKUPPATH\""
   # if the nether exists, back it up
   WORLDNETHER="$WORLDNAME""_nether"
   if [ -d "$MCPATH/$WORLDNETHER" ]
     then
-    echo " * Syncing \"$MCPATH/$WORLDNETHER\" to \"$BACKUPPATH/$WORLDNETHER\""
+    echo " * Sinkronisasi \"$MCPATH/$WORLDNETHER\" terhadap \"$BACKUPPATH/$WORLDNETHER\""
   as_user "rsync --checksum --group --human-readable --copy-links --owner --perms --recursive --times --update --delete \"$MCPATH/$WORLDNETHER\" \"$BACKUPPATH\""
   else
-    echo " * \"$MCPATH/$WORLDNETHER\" doesn't exist, skipping."
+    echo " * \"$MCPATH/$WORLDNETHER\" tidak ada, dilewati."
   fi
   # if the end exists, back it up
   WORLDTHEEND="$WORLDNAME""_the_end"
   if [ -d "$MCPATH/$WORLDTHEEND" ]
     then
-    echo " * Syncing \"$MCPATH/$WORLDTHEEND\" to \"$BACKUPPATH/$WORLDTHEEND\""
+    echo " * Sinkronisasi \"$MCPATH/$WORLDTHEEND\" terhadap \"$BACKUPPATH/$WORLDTHEEND\""
     as_user "rsync --checksum --group --human-readable --copy-links --owner --perms --recursive --times --update --delete \"$MCPATH/$WORLDTHEEND\" \"$BACKUPPATH\""
   else
-    echo " * \"$MCPATH/$WORLDTHEEND\" doesn't exist, skipping."
+    echo " * \"$MCPATH/$WORLDTHEEND\" tidak ada, dilewati."
   fi
   sleep 10
-  echo " * Creating compressed backup..."
+  echo " * Membuat cadangan terkompresi..."
   NOW="$(date +%Y-%m-%d.%H-%M-%S)"
   # Create a compressed backup file and background it so we can get back to restarting the server
   # You can tell when the compression is done as it makes an md5sum file of the backup
   as_user "cd "$BACKUPPATH" && tar cfz \""$WORLDNAME"_backup_"$NOW".tar.gz\" \"$WORLDNAME\" && md5sum \""$WORLDNAME"_backup_"$NOW".tar.gz\" > \""$WORLDNAME"_backup_"$NOW".tar.gz.md5\" &"
-  echo " * [OK] Backed up map \"$WORLDNAME\"."
+  echo " * [OK] Peta \"$WORLDNAME\" tercadangkan."
   # if we backed up the nether, create a backup of that too
   if [ -d "$BACKUPPATH/$WORLDNETHER" ]
     then
     as_user "cd "$BACKUPPATH" && tar cfz \""$WORLDNETHER"_backup_"$NOW".tar.gz\" \"$WORLDNETHER\" && md5sum \""$WORLDNETHER"_backup_"$NOW".tar.gz\" > \""$WORLDNETHER"_backup_"$NOW".tar.gz.md5\" &"
-    echo " * [OK] Backed up map \"$WORLDNETHER\"."
+    echo " * [OK] Peta \"$WORLDNETHER\" tercadangkan."
   fi
   # if we backed up the end, create a backup of that too
   if [ -d "$BACKUPPATH/$WORLDTHEEND" ]
     then
     as_user "cd "$BACKUPPATH" && tar cfz \""$WORLDTHEEND"_backup_"$NOW".tar.gz\" \"$WORLDTHEEND\" && md5sum \""$WORLDTHEEND"_backup_"$NOW".tar.gz\" > \""$WORLDTHEEND"_backup_"$NOW".tar.gz.md5\" &"
-    echo " * [OK] Backed up map \"$WORLDTHEEND\"."
+    echo " * [OK] Peta \"$WORLDTHEEND\" tercadangkan."
   fi
   # we can safely background the above commands and get back to restarting the server
 }
@@ -369,18 +369,18 @@ mc_backupmap() {
 ## Backs up executable by copying it to backup location
 
 mc_backupexe() {
-  echo " * Backing up the $SERVERNAME server executable..."
+  echo " * Mencadangkan berkas eksekusi peladen $SERVERNAME..."
   NOW="$(date +%Y-%m-%d.%H-%M-%S)"
   as_user "cp \""$MCPATH"/"$SERVICE"\" \""$BACKUPPATH"/"$SERVICE"_backup_"$NOW".jar\""
-  echo " * [OK] Backed up executable."
+  echo " * [OK] Berkas eksekusi tercandangkan."
 }
 
 ## Removes any backups older than $BACKUPS_TO_KEEP days, designed to be called by daily cron job
 
 mc_removeoldbackups() {
-  echo " * Removing backups older than $BACKUPS_TO_KEEP days..."
+  echo " * Menghapus cadangan dengan umur lebih dari $BACKUPS_TO_KEEP hari..."
   as_user "cd \"$BACKUPPATH\" && find . -name \"*backup*\" -type f -mtime +$BACKUPS_TO_KEEP | xargs rm -fv"
-  echo " * Removed old backups."
+  echo " * Cadangan lama telah dihapus."
 }
 
 ## Rotates logfile to server.1 through server.7, designed to be called by daily cron job
@@ -424,9 +424,9 @@ mc_logrotate() {
 mc_status() {
   if server_running
   then
-    echo " * $SERVERNAME status: Running (pid $JAVAPID)."
+    echo " * $SERVERNAME status: berjalan (pid $JAVAPID)."
   else
-    echo " * $SERVERNAME status: Not running."
+    echo " * $SERVERNAME status: tidak berjalan."
     exit 1
   fi
 }
@@ -471,7 +471,7 @@ mc_console() {
   then
     as_user "screen -S $SCRNAME -dr"
   else
-    echo " * [ERROR] $SERVERNAME was not running! Unable to console."
+    echo " * [GALAT] $SERVERNAME tidak berjalan! Tidak dapat menggunakan konsol."
     exit 1
   fi
 }
@@ -482,13 +482,13 @@ mc_say() {
   say_string="${@:1}"
   if [[ -z "$say_string" ]]
   then
-    echo " * You need to enter your message. Usage; \"minecraft say message\""
+    echo " * Kamu harus memasukkan pesanmu. Gunakan; \"minecraft say message\""
   elif server_running
   then
-    echo " * Broadcasting \"$say_string\""
+    echo " * Menyebarkan \"$say_string\""
     as_user "screen -p 0 -S $SCRNAME -X eval 'stuff \"say $say_string\"\015'"
   else
-    echo " * [ERROR] $SERVERNAME was not running!"
+    echo " * [GALAT] $SERVERNAME tidak berjalan!"
     exit 1
   fi
 }
@@ -548,7 +548,7 @@ case "$1" in
  mc_say "${@:2}"
  ;;
   *)
- echo " * Usage: minecraft {start|stop|restart|backup (worldname)|update|status|info|console|say}"
+ echo " * Gunakan: minecraft {start|stop|restart|backup (NamaDunia)|update|status|info|console|say}"
  exit 1
  ;;
 esac

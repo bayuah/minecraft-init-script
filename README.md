@@ -1,16 +1,18 @@
-minecraft-init-script by Super Jamie <jamie@superjamie.net>
+minecraft-init-script oleh Super Jamie <jamie@superjamie.net>
 
-This is an initscript to run a Minecraft or CraftBukkit server on CentOS, Fedora, and Ubuntu.
+Versi Bahasa Indonesia oleh Bayu Aditya H. <b@yuah.web.id>
 
-## Features ##
+Ini adalah berkas inisiasi untuk menjalankan peladen Minecraft atau CraftBukkit di CentOS, Fedora, dan Ubuntu.
 
-* Start, stop, restart CraftBukkit as a system service
-* Automatic (via cron) and manual logfile rotation
-* Automatic (via cron) and manual backups
-* Backup compression and rotation (keeps 7 days worth of backups)
-* Check latest Recommended Build and update to it if required
-* Information display including Java path, current memory usage, current TCP connections
-* Able to run multiple separate instances of the server at once
+## Fitur ##
+
+* Menjalankan, menghentikan, memulai-ulang CraftBukkit sebagai layanan sistem
+* Pemutaran berkas catatan manual dan otomatis (melalui cron)
+* Pencadangan manual dan otomatis (melalui cron)
+* Pemutaran dan kompresi pencadangan (menjaga 7 hari cadangan)
+* Memeriksa Bangun Disarankan dan pembaruan terkini bila dibutuhkan
+* Menampilkan informasi termasuk lajur Java path, penggunaan memori saat ini, sambungan TCP saat ini
+* Mampu menjalankan proses peladen terpisah secara bersamaan
 
 ## Features I'm considering adding ##
 
